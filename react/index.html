@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-100">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+  crossorigin="anonymous"
+/><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-XpW+6X4vpW+ijTpDt+PeZd/tpQtxjUHa3uU5sui8AUg0Ovc5cn9BlSYQSz5Dw0PqjRxk0y9vL7x+FZ1eD7voPw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://kit.fontawesome.com/45e38e596f.js" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-picker-element@2.0.0/dist/emoji-picker-element.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-XpW+6X4vpW+ijTpDt+PeZd/tpQtxjUHa3uU5sui8AUg0Ovc5cn9BlSYQSz5Dw0PqjRxk0y9vL7x+FZ1eD7voPw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diggow</title>
+    <style>
+      /* Ajoute une bordure autour de l'input */
+      #descriptionInput {
+          border: 1px solid #ccc;
+          padding: 8px;
+          margin: 8px 0;
+          box-sizing: border-box;
+          width: 100%;
+          
+      }
+  </style>
+  
+  <style>
+      /* Styles pour la première section */
+      #section1 {
+          width: 50%;
+          float: left;
+          background-color: #fff;
+          padding: 20px;
+          box-sizing: border-box;
+      }
+
+      /* Styles pour la deuxième section */
+      #section2 {
+          width: 50%;
+          float: left;
+          background-color: #fff;
+          padding: 20px;
+          box-sizing: border-box;
+      
+      }
+
+      /* Clearfix pour gérer le flottement des éléments fils */
+      .clearfix::after {
+          content: "";
+          clear: both;
+          display: table;
+      }
+  </style>
+  <style>
+      /* Ajout de styles pour créer une marge entre label et select */
+      label {
+          margin-right: 50px;
+           /* Vous pouvez ajuster la valeur selon vos préférences */
+      }
+  </style>
+  <style>
+      /* Ajoute une bordure autour de l'input */
+      #descriptionInput1 {
+          border: 1px solid #ccc;
+          padding: 40px;
+          margin: 40px 1;
+          box-sizing: border-box;
+          width: 100%;
+      }
+  </style>
+   <style>
+      /* Styles pour le bouton */
+      .custom-button {
+          display: inline-block;
+  padding: 06px 14px;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: #7a51b1; /* Couleur de fond */
+  color: #fff; /* Couleur du texte */
+  border: 2px solid #7a51b1; /* Bordure */
+  border-radius: 14px; /* Coins arrondis */
+  transition: all 0.3s ease; /* Transition pour tous les attributs au survol */
+}
+
+      .custom-button1 {
+          display: inline-block;
+          padding: 06px 14px;
+          font-size: 12px;
+          font-weight: bold;
+          text-align: center;
+          text-decoration: none;
+          cursor: pointer;
+          background-color: #fff; /* Couleur de fond */
+          color: #696969; /* Couleur du texte */
+          border: 2px solid ##696969; /* Bordure */
+          border-radius: 14px; /* Coins arrondis */
+          transition: all 0.3s ease; /* Transition pour tous les attributs au survol */
+      }
+
+      /* Style au survol du bouton */
+      .custom-button:hover {
+          background-color: #7a51b1; /* Nouvelle couleur de fond au survol */
+  transform: scale(1.1); /* Agrandissement du bouton au survol */
+}
+.custom-button1:hover {
+          background-color: #fff; /* Nouvelle couleur de fond au survol */
+  transform: scale(1.1); /* Agrandissement du bouton au survol */
+}
+  </style>
+  <style>
+      /* Styles pour le cadre */
+      .cadre {
+          border: 2px solid #808080; /* Bordure solide bleue */
+          padding: 80px; /* Marge intérieure de 20 pixels */
+          border-radius: 20px; /* Coins arrondis */
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Ombre légère */
+          max-width: 500px; /* Largeur maximale du cadre */
+          margin: 20px 0; /* Marge en haut et en bas, pas à droite ni à gauche */
+      }
+      
+
+      /* Styles pour le texte à l'intérieur du cadre */
+      .cadre p {
+          font-size: 16px;
+          color: #333;
+          line-height: 1.5;
+          margin: 0; /* Supprimer la marge par défaut des paragraphes */
+      }
+      .cadre2 {
+  width: 100%;
+  border: 1px solid black; /* Ajoutez une bordure pour visualiser le cadre */
+  box-sizing: border-box;
+  padding: 03px; /* Inclure la bordure dans la largeur du cadre */
+}
+      .conteneur-utilisateur {
+          display: flex; /* Utilisation de Flexbox pour aligner le contenu sur la même ligne */
+          align-items: center; /* Centrer verticalement les éléments dans le conteneur */
+          margin-bottom: 10px;
+      }
+      .utilisateur {
+          font-size: 15px;
+          font-weight: bold;
+          margin-right: 10px; /* Marge à droite du nom d'utilisateur pour l'espace */
+          margin-left: 10px; /* Ajoutez un espace à gauche du texte */
+      }
+
+      /* Styles pour l'image de l'utilisateur */
+      .image-utilisateur {
+          max-width: 30px; /* Largeur maximale de l'image de l'utilisateur */
+          border-radius: 50%;
+      }
+      #emoji {
+  display: block;
+  text-align: right; /* Alignement à droite */
+  margin-top: 10px; /* Marge en haut */
+}
+.max-characters-exceeded {
+      color: red; /* Change la couleur du texte en rouge */
+  }
+
+
+  </style>
+  </head>
+  <body class="h-full">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

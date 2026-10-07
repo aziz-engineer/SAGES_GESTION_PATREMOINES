@@ -1,0 +1,42 @@
+.calendar-container {
+    height: 600px;
+    margin-top: 20px;
+}
+
+.rbc-header {
+    color: black;
+    font-size: 14px !important;
+    background: rgba(255, 255, 255, 0.712);
+}
+
+.rbc-event-content {
+    color: black;
+}
+
+.event-component {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.event-title {
+    font-weight: bold;
+}
+
+.event-sub-title {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.event-legend {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}

@@ -1,0 +1,32 @@
+.cadre > div > p{
+    font-weight:10000;
+    color: gray;
+  }
+
+.cadre{
+  border: 1px solid   rgb(179, 179, 179);
+  background-color: white;
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.title{
+font-weight:600;
+color: black;
+padding-bottom: 10px;
+}
+
+ .event-sub-title{
+    font-weight: 700;
+  }
+
+ .event-title{
+    color: rgb(165, 165, 165);
+    font-weight: 300;
+    font-size: 15px;
+  }
+
+ .titleeditsection{
+  display: flex;
+  justify-content: space-between;
+}
