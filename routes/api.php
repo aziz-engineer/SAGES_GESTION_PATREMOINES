@@ -38,6 +38,10 @@ use App\Http\Controllers\ReglementController;
 |
 */
 
+Route::get('/healthz', function () {
+    return response()->json(['status' => 'ok']);
+});
+
 
 
 
@@ -258,4 +262,3 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/reglements/{id}', [ReglementController::class, 'update']);
     Route::delete('/reglements/{id}', [ReglementController::class, 'destroy']);
 });
-

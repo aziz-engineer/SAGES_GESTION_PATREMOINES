@@ -1,7 +1,6 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import DefaultLayout from "./components/DefaultLayout";
 import GuestLayout from "./components/GuestLayout";
-import UpdateProfile from "./views/Home";
 import Login from "./views/Login";
 import Signup from "./views/Signup";
 import FacebookCalendar from "./views/Calendar";
@@ -29,8 +28,13 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <UpdateProfile />,
-        key: "UpdateProfile",
+        element: <Navigate to="/patrimoine" replace />,
+        key: "Home",
+      },
+      {
+        path: "/list_product_home_page",
+        element: <Navigate to="/patrimoine" replace />,
+        key: "LegacyHome",
       }, {
         path: "/CalendarComponent",
         element: <FacebookCalendar />,

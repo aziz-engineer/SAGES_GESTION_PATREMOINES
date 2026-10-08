@@ -3,7 +3,7 @@
 This repository contains a React/Vite frontend and a Laravel API. Deploy them as separate services:
 
 - Import the repository root into Vercel. The root `vercel.json` defines the `frontend` Vite service from `react/` and routes public `/api/*` requests to the Render API.
-- Deploy the Laravel API as a Docker web service on Render using the repository's `render.yaml` blueprint. It explicitly requests Render's Free instance plan. Laravel runs on Render; it is not a Vercel service.
+- Deploy the Laravel API as a Docker web service on Render using the repository's `render.yaml` blueprint. It explicitly requests Render's Free instance plan and checks `/api/healthz` during deployment. Laravel runs on Render; it is not a Vercel service.
 - Use Neon PostgreSQL for the Laravel database.
 
 ## Free-tier limitations
@@ -18,7 +18,7 @@ The database is separate from the Render web-service plan. This configuration ex
 2. Deploy the Render API and run `php artisan migrate --force` once the production database is configured. Do not run `migrate:fresh` against a production database.
 3. The root `vercel.json` proxies `/api/*` to `https://sages-api.onrender.com`, the Render service URL. Import the repository root into Vercel as a single project and deploy it. Vercel builds the `frontend` service from `react/`; all other paths go to the React SPA.
 
-The React app uses the same-origin `/api` path, so it needs no `VITE_API_BASE_URL` setting on Vercel. The Vite dev server proxies `/api` to a local Laravel server at `http://127.0.0.1:8000`.
+The React app opens the property-management section after login and uses the same-origin `/api` path, so it needs no `VITE_API_BASE_URL` setting on Vercel. The Vite dev server proxies `/api` to a local Laravel server at `http://127.0.0.1:8000`.
 
 The Laravel API is an external Render service, not a Vercel service. Therefore this configuration has no Vercel service binding: browser requests use the public `/api/*` rewrite, while bindings are for server-side calls between Vercel services.
 

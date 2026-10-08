@@ -31,7 +31,7 @@ export default function Login() {
         setCurrentUser(data.user);
         setUserToken(data.token);
         toast.success("Connexion reussie avec succes.");
-        navigate("/Instagram");
+        navigate("/patrimoine");
       })
       .catch((error) => {
         if (error.response && error.response.status === 401) {
