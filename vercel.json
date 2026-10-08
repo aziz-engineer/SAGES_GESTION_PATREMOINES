@@ -15,7 +15,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://oblixa-mobile-app.onrender.com/api/$1"
+      "destination": "https://sages-api.onrender.com/api/$1"
     },
     {
       "source": "/(.*)",

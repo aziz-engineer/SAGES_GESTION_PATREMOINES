@@ -16,7 +16,7 @@ The database is separate from the Render web-service plan. This configuration ex
 
 1. Push the repository to GitHub and import it into Render as a Blueprint. Set the required `sync: false` environment values in Render, including the Neon connection details, a production `APP_KEY`, the Render API URL for `APP_URL`, and the Vercel site URL for `CORS_ALLOWED_ORIGINS`.
 2. Deploy the Render API and run `php artisan migrate --force` once the production database is configured. Do not run `migrate:fresh` against a production database.
-3. Replace the placeholder Render hostname in the root `vercel.json` with the actual public URL of the Render API. Then import the repository root into Vercel as a single project and deploy it. Vercel builds the `frontend` service from `react/`; `/api/*` is proxied to Render and all other paths go to the React SPA.
+3. The root `vercel.json` proxies `/api/*` to `https://sages-api.onrender.com`, the Render service URL. Import the repository root into Vercel as a single project and deploy it. Vercel builds the `frontend` service from `react/`; all other paths go to the React SPA.
 
 The React app uses the same-origin `/api` path, so it needs no `VITE_API_BASE_URL` setting on Vercel. The Vite dev server proxies `/api` to a local Laravel server at `http://127.0.0.1:8000`.
 
