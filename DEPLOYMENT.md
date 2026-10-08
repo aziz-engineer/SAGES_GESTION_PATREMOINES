@@ -3,8 +3,14 @@
 This repository contains a React/Vite frontend and a Laravel API. Deploy them as separate services:
 
 - Import the repository root into Vercel. The root `vercel.json` defines the `frontend` Vite service from `react/` and routes public `/api/*` requests to the Render API.
-- Deploy the Laravel API as a Docker web service on Render using the repository's `render.yaml` blueprint. Laravel runs on Render; it is not a Vercel service.
+- Deploy the Laravel API as a Docker web service on Render using the repository's `render.yaml` blueprint. It explicitly requests Render's Free instance plan. Laravel runs on Render; it is not a Vercel service.
 - Use Neon PostgreSQL for the Laravel database.
+
+## Free-tier limitations
+
+The Render API service is configured with `plan: free`. In Render's Blueprint setup, choose the Free instance option if prompted and verify the service overview shows the Free plan before deploying; do not upgrade it. The Free service itself has no compute charge. Render documents that if you have no payment method and exceed included bandwidth or build minutes, it suspends the service or disables new builds instead of charging overages. A Free web service may sleep after 15 minutes without traffic, causing the first request after sleep to take about a minute, and its local filesystem is temporary. Use external persistent storage for user uploads; do not rely on files in the service container surviving restarts or deploys.
+
+The database is separate from the Render web-service plan. This configuration expects PostgreSQL credentials such as a Neon database; check that provider's current free-tier limits and avoid putting database credentials in Git. Render's own Free Postgres has its own storage and expiration limitations, so it is not configured by this Blueprint.
 
 ## Deployment order
 
