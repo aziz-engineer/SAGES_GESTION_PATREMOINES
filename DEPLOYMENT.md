@@ -2,25 +2,19 @@
 
 This repository contains a React/Vite frontend and a Laravel API. Deploy them as separate services:
 
-- Deploy `react/` to Vercel as a Vite project. Set the Vercel project Root Directory to `react`, Build Command to `npm run build`, and Output Directory to `dist`.
-- Deploy the Laravel API as a Docker web service on Render using the repository's `render.yaml` blueprint. Vercel is configured here for the static React SPA; it is not configured to run this Laravel application.
+- Import the repository root into Vercel. The root `vercel.json` defines the `frontend` Vite service from `react/` and routes public `/api/*` requests to the Render API.
+- Deploy the Laravel API as a Docker web service on Render using the repository's `render.yaml` blueprint. Laravel runs on Render; it is not a Vercel service.
 - Use Neon PostgreSQL for the Laravel database.
 
 ## Deployment order
 
 1. Push the repository to GitHub and import it into Render as a Blueprint. Set the required `sync: false` environment values in Render, including the Neon connection details, a production `APP_KEY`, the Render API URL for `APP_URL`, and the Vercel site URL for `CORS_ALLOWED_ORIGINS`.
 2. Deploy the Render API and run `php artisan migrate --force` once the production database is configured. Do not run `migrate:fresh` against a production database.
-3. Import the same GitHub repository into Vercel, set its Root Directory to `react`, and configure the frontend environment variable below with the deployed API URL, including `/api`.
+3. Replace the placeholder Render hostname in the root `vercel.json` with the actual public URL of the Render API. Then import the repository root into Vercel as a single project and deploy it. Vercel builds the `frontend` service from `react/`; `/api/*` is proxied to Render and all other paths go to the React SPA.
 
-## Vercel frontend
+The React app uses the same-origin `/api` path, so it needs no `VITE_API_BASE_URL` setting on Vercel. The Vite dev server proxies `/api` to a local Laravel server at `http://127.0.0.1:8000`.
 
-Set this Vercel environment variable for Production (and Preview if needed):
-
-```text
-VITE_API_BASE_URL=https://YOUR-LARAVEL-API-HOST/api
-```
-
-The Vercel rewrite in `react/vercel.json` sends React Router paths back to the SPA entry page. Redeploy the frontend after changing its environment variables.
+The Laravel API is an external Render service, not a Vercel service. Therefore this configuration has no Vercel service binding: browser requests use the public `/api/*` rewrite, while bindings are for server-side calls between Vercel services.
 
 ## Laravel API environment
 

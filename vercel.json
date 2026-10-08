@@ -1,0 +1,27 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "frontend": {
+      "root": "react",
+      "framework": "vite",
+      "rewrites": [
+        {
+          "source": "/(.*)",
+          "destination": "/"
+        }
+      ]
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://REPLACE-WITH-RENDER-API-URL.onrender.com/api/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": {
+        "service": "frontend"
+      }
+    }
+  ]
+}
