@@ -25,5 +25,5 @@ RUN test -f public/index.php
 # Installez les dépendances de Laravel
 RUN composer install --no-dev --optimize-autoloader
 
-# Commande pour démarrer le serveur intégré de Laravel
-CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"]
+# Apply database migrations before serving requests.
+CMD ["sh", "-c", "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"]

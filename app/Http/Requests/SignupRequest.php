@@ -33,7 +33,7 @@ class SignupRequest extends FormRequest
                 Password::min(8)->mixedCase()->numbers()->symbols()
             ],
             'imageduprofile' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'numtelephone' => 'nullable|numeric',
+            'numtelephone' => 'nullable|string|max:30',
             'adresse' => 'nullable|string|max:255',
         ];
     }

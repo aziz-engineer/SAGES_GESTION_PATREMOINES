@@ -121,7 +121,9 @@ return [
     |
     */
 
-    'key' => env('APP_KEY'),
+    'key' => ($key = env('APP_KEY')) && !str_starts_with($key, 'base64:')
+        ? 'base64:'.$key
+        : $key,
 
     'cipher' => 'AES-256-CBC',
 

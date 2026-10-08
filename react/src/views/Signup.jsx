@@ -15,15 +15,17 @@ export default function Signup() {
   const [imageName, setImageName] = useState('Choisir un fichier');
   const [numtelephone, setNumTelephone] = useState("");
   const [adresse, setAdresse] = useState("");
-  const [error, setError] = useState({ __html: "" });
+  const [errors, setErrors] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === 'imageduprofile') {
-      setImageDuProfile(files[0]);
-      setImageName(files[0].name);
+      const file = files?.[0] ?? null;
+      setImageDuProfile(file);
+      setImageName(file?.name ?? 'Choisir un fichier');
     } else if (name === 'numtelephone') {
       setNumTelephone(value);
     } else if (name === 'adresse') {
@@ -43,9 +45,10 @@ export default function Signup() {
     document.getElementById('imageduprofile').click();
   };
 
-  const onSubmit = (ev) => {
+  const onSubmit = async (ev) => {
     ev.preventDefault();
-    setError({ __html: "" });
+    setErrors([]);
+    setIsSubmitting(true);
 
     const formData = new FormData();
     formData.append('name', fullName);
@@ -58,25 +61,28 @@ export default function Signup() {
     formData.append('numtelephone', numtelephone);
     formData.append('adresse', adresse);
 
-    axiosClient.post("/signup", formData)
-      .then(({ data }) => {
-        toast.success("Compte cree avec succes.");
-        navigate("/login");
-      })
-      .catch((error) => {
-        if (error.response) {
-          const validationErrors = error.response.data?.errors || {};
-          const finalErrors = Object.values(validationErrors).reduce((accum, next) => [...accum, ...next], []);
-          console.log(finalErrors);
-          setError({
-            __html: finalErrors.length > 0
-              ? finalErrors.join('<br>')
-              : (error.response.data?.message || 'Creation du compte impossible.')
-          });
-        }
-        toast.error("Echec de creation du compte.");
-        console.error(error);
-      });
+    try {
+      const { data } = await axiosClient.post("/signup", formData);
+      setCurrentUser(data.user);
+      setUserToken(data.token);
+      toast.success("Compte cree avec succes.");
+      navigate("/patrimoine");
+    } catch (error) {
+      const response = error.response;
+      const validationErrors = response?.data?.errors;
+      if (response?.status === 422 && validationErrors) {
+        setErrors(Object.values(validationErrors).flat());
+      } else if (response?.status >= 500) {
+        setErrors(["Le serveur ne peut pas créer le compte pour le moment. Réessayez plus tard."]);
+      } else if (!response) {
+        setErrors(["Impossible de joindre le serveur. Vérifiez votre connexion et réessayez."]);
+      } else {
+        setErrors([response.data?.message || "Création du compte impossible."]);
+      }
+      toast.error("Echec de creation du compte.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -92,8 +98,11 @@ export default function Signup() {
         Signup for free
       </h2>
 
-      {error.__html && (
-        <div className="bg-red-500 rounded py-2 px-3 text-white" dangerouslySetInnerHTML={error}>
+      {errors.length > 0 && (
+        <div className="bg-red-500 rounded py-2 px-3 text-white" role="alert">
+          <ul className="list-disc pl-5">
+            {errors.map((message, index) => <li key={`${index}-${message}`}>{message}</li>)}
+          </ul>
         </div>
       )}
 
@@ -144,13 +153,17 @@ export default function Signup() {
               id="password"
               name="password"
               type="password"
-              autoComplete="current-password"
+              autoComplete="new-password"
+              minLength={8}
               required
               value={password}
               onChange={handleChange}
               className="relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
               placeholder="Password"
             />
+            <p className="px-3 py-1 text-xs text-gray-600">
+              At least 8 characters, including uppercase, lowercase, a number, and a symbol.
+            </p>
           </div>
           <div>
             <label htmlFor="password-confirmation" className="sr-only">
@@ -193,7 +206,8 @@ export default function Signup() {
             <input
               id="numtelephone"
               name="numtelephone"
-              type="number"
+              type="tel"
+              inputMode="tel"
               value={numtelephone}
               onChange={handleChange}
               className="relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
@@ -219,7 +233,8 @@ export default function Signup() {
         <div>
           <button
             type="submit"
-            className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            disabled={isSubmitting}
+            className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
               <LockClosedIcon
@@ -227,7 +242,7 @@ export default function Signup() {
                 aria-hidden="true"
               />
             </span>
-            Signup
+            {isSubmitting ? "Création du compte..." : "Signup"}
           </button>
         </div>
       </form>
