@@ -19,6 +19,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copiez le code source
 COPY . .
 
+# Fail the image build if Git ignores the Laravel web entrypoint.
+RUN test -f public/index.php
+
 # Installez les dépendances de Laravel
 RUN composer install --no-dev --optimize-autoloader
 
