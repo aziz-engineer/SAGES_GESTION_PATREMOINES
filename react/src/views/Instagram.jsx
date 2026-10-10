@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import axios from "axios";
 import { NavLink } from "react-router-dom";
+import axiosClient from "../axios";
 import {
   FaUsers,
   FaMapMarkerAlt,
@@ -26,12 +26,6 @@ import {
 } from "react-icons/fa";
 
 import AgilLogo from "../assets/Agil_Logo.gif";
-import { API_BASE_URL } from "../apiConfig";
-
-const API = axios.create({
-  baseURL: API_BASE_URL,
-  headers: { Accept: "application/json", "Content-Type": "application/json" },
-});
 
 // -----------------------------
 // Helpers
@@ -420,7 +414,7 @@ export default function Accueil() {
     setLoading(true);
     setErr("");
     try {
-      const [locRes, staRes, conRes] = await Promise.all([API.get("/locataires"), API.get("/stations"), API.get("/contrats")]);
+      const [locRes, staRes, conRes] = await Promise.all([axiosClient.get("/locataires"), axiosClient.get("/stations"), axiosClient.get("/contrats")]);
 
       const loc = normalizeList(locRes.data);
       const sta = normalizeList(staRes.data);
@@ -429,7 +423,7 @@ export default function Accueil() {
       setLocataires(loc.items || []);
       setStations(sta.items || []);
 
-      const all = await fetchAllPages((page) => API.get("/factures", { params: { page } }));
+      const all = await fetchAllPages((page) => axiosClient.get("/factures", { params: { page } }));
       setFacturesAll(all);
 
       setStats({
@@ -448,7 +442,7 @@ export default function Accueil() {
 
       // /factures/stats optionnel
       try {
-        const s = await API.get("/factures/stats");
+        const s = await axiosClient.get("/factures/stats");
         setInvoiceStats(
           s.data || { global: { count_factures: all.length, sum_total_ttc: 0 }, by_month: [], by_station: [], by_locataire: [] }
         );

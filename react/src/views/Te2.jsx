@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
 import {
   FaCalculator,
@@ -28,12 +27,7 @@ import autoTable from "jspdf-autotable";
 
 // ✅ Branding (AGIL)
 import AgilLogo from "../assets/Agil_Logo.gif";
-import { API_BASE_URL } from "../apiConfig";
-
-const API = axios.create({
-  baseURL: API_BASE_URL,
-  headers: { Accept: "application/json", "Content-Type": "application/json" },
-});
+import axiosClient from "../axios";
 
 const cn = (...c) => c.filter(Boolean).join(" ");
 
@@ -453,12 +447,12 @@ export default function Te2() {
     (async () => {
       try {
         const [locRes, staRes, ficheRes, contratRes] = await Promise.all([
-          API.get("/locataires"),
-          API.get("/stations"),
+          axiosClient.get("/locataires"),
+          axiosClient.get("/stations"),
           // ✅ il faut GET /api/fichelocs
-          API.get("/fichelocs"),
+          axiosClient.get("/fichelocs"),
           // ✅ il faut GET /api/contrats
-          API.get("/contrats"),
+          axiosClient.get("/contrats"),
         ]);
         setLocataires(locRes.data || []);
         setStations(staRes.data || []);
@@ -772,7 +766,7 @@ export default function Te2() {
 
     setLoading(true);
     try {
-      const res = await API.post("/facturation/calculate", payload);
+      const res = await axiosClient.post("/facturation/calculate", payload);
       setResult(res.data);
       toast.success("Calcul de la facture effectue avec succes.");
     } catch (e) {
@@ -968,7 +962,7 @@ export default function Te2() {
 
     setLoadingPrint(true);
     try {
-      const storeRes = await API.post("/facturation/store", payload);
+      const storeRes = await axiosClient.post("/facturation/store", payload);
       const storedFacture = storeRes.data?.facture;
 
       await generatePdfFromStoredFacture(storedFacture);
