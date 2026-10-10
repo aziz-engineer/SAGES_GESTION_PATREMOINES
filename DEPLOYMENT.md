@@ -4,7 +4,7 @@ This repository contains a React/Vite frontend and a Laravel API. Deploy them as
 
 - Import the repository root into Vercel. The root `vercel.json` defines the `frontend` Vite service from `react/` and routes public `/api/*` requests to the Render API.
 - Deploy the Laravel API as a Docker web service on Render using the repository's `render.yaml` blueprint. It explicitly requests Render's Free instance plan and checks `/api/healthz` during deployment. Laravel runs on Render; it is not a Vercel service.
-- The Render Blueprint provisions a Free PostgreSQL database and injects its connection settings into the API service.
+- The Render Blueprint provisions a Free PostgreSQL database and injects its connection settings into the API service. To use Neon instead, configure `DATABASE_URL` on the Render `sages-api` service; a Vercel environment variable only configures the frontend and does not change the Laravel API's database.
 
 ## Free-tier limitations
 
@@ -41,7 +41,24 @@ DB_SSLMODE=require
 CORS_ALLOWED_ORIGINS=https://sagesgestionpatremoines.vercel.app
 ```
 
+### Using Neon PostgreSQL
+
+The `DATABASE_URL` entry in `render.yaml` uses `sync: false` so the Neon secret is entered in Render and is never committed to Git. In the Render Dashboard, open the `sages-api` web service, choose **Environment**, add `DATABASE_URL` with the Neon PostgreSQL connection string (prefer Neon’s pooled connection string and require TLS with `sslmode=require`), save, and redeploy. Do not add the secret to Vercel: Vercel only hosts the frontend, while Laravel connects to the database from Render. Laravel's PostgreSQL connection reads `DATABASE_URL` in preference to the individual `DB_HOST`/`DB_DATABASE`/`DB_USERNAME`/`DB_PASSWORD` variables.
+
+On startup, the container runs `php artisan migrate --force`, which creates or updates the schema but does not transfer rows from XAMPP or create stations. After redeployment, verify `/api/healthz`, then check `/api/stations` and `/api/familles`; an empty JSON array means those tables still need actual records.
+
 The default database seeder intentionally does not create a production admin unless `ADMIN_PASSWORD` is explicitly configured. Create the first admin with a strong unique password, and remove that environment variable after the one-time seed.
+
+## Local demonstration data
+
+`Database\Seeders\DemoDataSeeder` adds clearly labelled fictional examples for the property-management screens. Run it only against a local development database, after migrations:
+
+```text
+php artisan migrate
+php artisan db:seed --class="Database\Seeders\DemoDataSeeder"
+```
+
+The seeder refuses to run in the production environment or against a non-local database host. It does not create users, credentials, real tenant records, or social-media data. Do not use these examples as operational or financial records.
 
 ## GitHub
 

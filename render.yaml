@@ -19,6 +19,8 @@ services:
         value: https://sagesgestionpatremoines.vercel.app
       - key: DB_CONNECTION
         value: pgsql
+      - key: DATABASE_URL
+        sync: false
       - key: DB_HOST
         fromDatabase:
           name: sages-db
